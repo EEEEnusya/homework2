@@ -1,0 +1,101 @@
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <stdlib.h>
+#include <sstream>
+using namespace std;
+
+///функция преобразовывает строку в число
+float preob(std::string a) {
+    float b;
+    std::stringstream ss;
+    ss << a;
+    ss >> b;
+    return b;
+}
+
+
+int main() {
+
+    /// Ввод задачи
+    std::cout << "Пожалуйста, введите условие задачи" << endl;
+    std::string uslov;
+    std::cin >> uslov;
+    std::vector<std::string> uslov1;
+    std::string vrem;
+    size_t i = 0;
+
+
+///Преобразование строки в массив строк из цифр и знаков
+    while (i < uslov.size()) {
+        if (uslov[i] == '+' || uslov[i] == '-' || uslov[i] == '*' || uslov[i] == '/') {
+            uslov1.push_back(vrem);
+            vrem = uslov[i];
+            uslov1.push_back(vrem);
+            i++;
+            vrem = "";
+        } else {
+            vrem += uslov[i];
+            i++;
+        }
+        if (i == uslov.size()) {
+            uslov1.push_back(vrem);
+        }
+    }
+
+
+///Избавление от * и / в массиве
+    for (size_t j = 0; j < uslov1.size(); ++j) {
+        if (uslov1[j] == "*") {
+            float ch1, ch2, proiz;
+            ch1 = preob(uslov1[j + 1]);
+            ch2 = preob(uslov1[j - 1]);
+            auto i = uslov1.begin();
+            uslov1.erase(i + j);
+            uslov1.erase(i + j);
+            uslov1.erase(i + j - 1);
+            std::string str;
+            proiz = ch1 * ch2;
+            str = to_string(proiz);
+            auto i1 = uslov1.cbegin();
+            uslov1.emplace(i1 + j - 1, str);
+
+        }
+        if (uslov1[j] == "/") {
+            float ch1, ch2, del;
+            ch1 = preob(uslov1[j + 1]);
+            ch2 = preob(uslov1[j - 1]);
+            auto i = uslov1.begin();
+            uslov1.erase(i + j);
+            uslov1.erase(i + j);
+            uslov1.erase(i + j - 1);
+            std::string str;
+            del = ch2 / ch1;
+            str = to_string(del);
+            auto i1 = uslov1.cbegin();
+            uslov1.emplace(i1 + j - 1, str);
+        }
+    }
+
+
+///Подсчет суммы и разности
+    float rezylt;
+    rezylt = preob(uslov1[0]);
+    for (size_t i = 1; i < uslov1.size(); i += 2) {
+        if (uslov1[i] == "-") {
+            float ch;
+            ch = preob(uslov1[i + 1]);
+            rezylt = rezylt - ch;
+        }
+        if (uslov1[i] == "+") {
+            float ch;
+            ch = preob(uslov1[i + 1]);
+            rezylt = rezylt + ch;
+        }
+    }
+
+
+    std::cout << "Ответ:" << endl;
+    std::cout << rezylt;
+}
